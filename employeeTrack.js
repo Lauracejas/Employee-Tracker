@@ -13,8 +13,30 @@ const connection = mysql.createConnection({
 
   // Your password
   password: '',
-  database: 'greatBay_DB',
+  database: 'emp_trackerDB',
 });
+
+// function which prompts the user for what action they want to do
+
+const start = () => {
+  inquirer.prompt({
+    type: 'rawlist',
+    name: 'toDo',
+    message: 'What would you like to do? ',
+    choices: [
+      {name: 'View all employees', value: viewAllEmp},
+      {name: 'View all employees by Department', value: viewAEmpByDepartment},
+      {name: 'View all employees by Manager', value: viewAEmpByManager},
+      {name: 'Add employee', value: addEmployee},
+      {name: 'Update employee role', value: updateEmployeeRole},
+      {name: 'Update employee manager', value: updateEmployeeManager},
+    ],
+  }).then(answer => {
+    answer.toDo();
+  });
+};
+
+
 
 
 
