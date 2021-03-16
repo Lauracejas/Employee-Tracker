@@ -1,0 +1,25 @@
+{
+  "name": "Employee-Tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "employeeTrack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node employeeTrack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lauracejas/Employee-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lauracejas/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/Lauracejas/Employee-Tracker#readme",
+  "dependencies": {
+    "inquire": "^0.4.8",
+    "mysql": "^2.18.1"
+  }
+}
