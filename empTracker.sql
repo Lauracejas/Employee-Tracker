@@ -22,7 +22,7 @@ CREATE TABLE employee (
   first_name VARCHAR(50) NULL,
   last_name VARCHAR(50) NULL,
   role_id INT NOT NULL,
-  manager_id INT NOT NULL,
+  manager_id INT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (role_id) REFERENCES role(id),
   FOREIGN KEY (manager_id) REFERENCES employee(id)
@@ -32,21 +32,25 @@ INSERT INTO department (name) VALUES ("Engineering");
 INSERT INTO department (name) VALUES ("Marketing");
 INSERT INTO department (name) VALUES ("Human Resource");
 INSERT INTO department (name) VALUES ("Finance");
+INSERT INTO department (name) VALUES ("Sales Representative");
+INSERT INTO department (name) VALUES ("Accountting");
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("Technology Officer", 150000, 1);
 INSERT INTO role (title, salary, department_id)
-VALUES ("Executive assistants", 50000, 2);
+VALUES ("Executive assistants", 50000, 4);
 INSERT INTO role (title, salary, department_id)
-VALUES ("Marketing manager", 40000, 3);
+VALUES ("Marketing manager", 40000, 5);
 INSERT INTO role (title, salary, department_id)
-VALUES ("Software Ingineer", 250000, 4);
+VALUES ("Software Ingineer", 250000, 1);
 INSERT INTO role (title, salary, department_id)
-VALUES ("Manager", 100000, 5);
+VALUES ("Manager", 100000, 6);
 INSERT INTO role (title, salary, department_id)
-VALUES ("Project manager", 60000, 6);
+VALUES ("Project manager", 60000, 1);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Laura", "Cejas", 123, 12);
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Laura", "Cejas", 1);
+
+
 
 
