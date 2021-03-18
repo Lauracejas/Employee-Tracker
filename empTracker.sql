@@ -49,7 +49,11 @@ INSERT INTO role (title, salary, department_id)
 VALUES ("Project manager", 60000, 1);
 
 INSERT INTO employee (first_name, last_name, role_id)
-VALUES ("Laura", "Cejas", 1);
+VALUES ("Laura", "Cejas", 6);
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Carlos", "Fox", 5);
+
+
 
 
 
