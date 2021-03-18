@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-require('console.table');
+//require('console.table');
 
 // create the connection information for the sql database
 const connection = mysql.createConnection({
@@ -31,7 +31,8 @@ const start = () => {
       'View all roles',
       'Add employee',
       'Update employee role',
-      'Update employee manager',
+      'EXIT'
+      
     ],
   })
     .then(answer => {
@@ -57,8 +58,8 @@ const start = () => {
         case 'EXIT':
           exitApp();
           break;
-          default:
-            break;
+        default:
+          break;
 
       }
 
@@ -99,15 +100,15 @@ const viewEmpByDepartment = () => {
 
 const viewAllRoles = () => {
   connection.query("SELECT * FROM department", (err, res) => {
-  if (err) throw err
-  console.table(res)
-  start()
-});
+    if (err) throw err
+    console.table(res)
+    start()
+  });
 }
 
 
 const viewAllDepartments = () => {
-    connection.query("SELECT * FROM role", (err, res) => {
+  connection.query("SELECT * FROM role", (err, res) => {
     if (err) throw err
     console.table(res)
     start()
@@ -142,12 +143,12 @@ const addEmployee = () => {
           name: "managerId",
           message: "Who is the employee's manager? ",
           choices: managers.map(manager => {
-            return { name: `${manager.first_name} ${manager.last_name}`, value: manager.id}
+            return { name: `${manager.first_name} ${manager.last_name}`, value: manager.id }
           })
         },
       ])
         .then(answer => {
-          console.log(answer);
+          //console.log(answer);
           connection.query('INSERT INTO employee SET ?',
             {
               first_name: answer.firstname,
@@ -159,33 +160,51 @@ const addEmployee = () => {
               if (err) throw err
               console.table('Your employee has been added!');
               start();
-            }   
-        )
+            }
+          )
+        });
     });
   });
-});
 }
-
 
 const updateEmployeeRole = () => {
-  connection.query(`"SELECT employe.first_name, role.title FROM employee"`);
-  if (err) throw err
-  const updateEmpQuestions = [
-    {
-      name: "role",
-      type: "list",
-      message: "What is the employee's name? ",
-      choices: [],
-    }
-  ]
-}
+  const query = `SELECT employe.first_name, role.title 
+  FROM employee JOIN role ON employee.role_id = role.id
+  `;
+  connection.query(query, (err, res) => {
+    if (err) throw err
+    console.log(res);
+    inquirer.prompt = ([
+      {
+        name: "lastname",
+        type: "rawlist",
+        message: "What is the employee's last name? :",
+        choices: () => {
+          var lastName = [];
+          for (var i = 0; i < res.length; i++) {
+            lastName.push(res[i].last_name);
+          }
+          return lastName;
+        },
+      },
+      {
+        name: "role",
+        type: "rawlist",
+        message: "What is the employee's new Role? ",
+        choices: selectRole(),
+      }
+    ])
+      //  I Have to finish this part of the code to seve the updated employee
 
-connection.connect((err) => {
-  if (err) throw err;
-  // run the start function after the connection is made to prompt the user
-  start();
-});
+    });
+  };
 
-const exitApp = () => {
-  connection.end();
-}
+  connection.connect((err) => {
+    if (err) throw err;
+    // run the start function after the connection is made to prompt the user
+    start();
+  });
+
+  const exitApp = () => {
+    connection.end();
+  }
