@@ -21,7 +21,7 @@ CLI Content Management System to manage a company's employees. The application l
 ## Usage
 You can see these tests run by viewing the provided animated GIF file
 
-![usage](./gif-readme/readmeGif.gif)
+![usage](./employee-tacker.gif)
 
 
 
