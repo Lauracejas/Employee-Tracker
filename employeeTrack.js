@@ -26,8 +26,9 @@ const start = () => {
     message: 'What would you like to do? ',
     choices: [
       'View all employees',
+      'View all departments',
       'View all employees by Department',
-      'View all employees by Manager',
+      'View all roles',
       'Add employee',
       'Update employee role',
       'Update employee manager',
@@ -38,11 +39,14 @@ const start = () => {
         case 'View all employees':
           viewAllEmp();
           break;
+        case 'View all departments':
+          viewAllDepartments();
+          break;
         case 'View all employees by Department':
           viewEmpByDepartment();
           break;
-        case 'View all employees by Manager':
-          viewAEmpByManager();
+        case 'View all roles':
+          viewAllRoles();
           break;
         case 'Add employee':
           addEmployee();
@@ -50,9 +54,11 @@ const start = () => {
         case 'Update employee role':
           updateEmployeeRole();
           break;
-        case 'Update employee manager':
-          updateEmployeeManager();
+        case 'EXIT':
+          exitApp();
           break;
+          default:
+            break;
 
       }
 
@@ -91,10 +97,17 @@ const viewEmpByDepartment = () => {
   });
 }
 
-const viewAEmpByManager = () => {
-  const query =
-    `SELECT employee.first_name, employee.last_name FROM employee WHERE role_id = 6`;
-  connection.query(query, (err, res) => {
+const viewAllRoles = () => {
+  connection.query("SELECT * FROM department", (err, res) => {
+  if (err) throw err
+  console.table(res)
+  start()
+});
+}
+
+
+const viewAllDepartments = () => {
+    connection.query("SELECT * FROM role", (err, res) => {
     if (err) throw err
     console.table(res)
     start()
@@ -121,7 +134,7 @@ const addEmployee = () => {
           name: "roleId",
           message: "What is the employee's role? ",
           choices: roles.map(role => {
-            return { name: role.title, value: role.title }
+            return { name: role.title, value: role.id }
           })
         },
         {
@@ -129,48 +142,30 @@ const addEmployee = () => {
           name: "managerId",
           message: "Who is the employee's manager? ",
           choices: managers.map(manager => {
-            return { name: `${manager.first_name} ${manager.last_name}`, value: `${manager.first_name} ${manager.last_name}` }
+            return { name: `${manager.first_name} ${manager.last_name}`, value: manager.id}
           })
         },
       ])
         .then(answer => {
-          // console.log(answer);
-          // connection.query('INSERT INTO employee SET ?',
-          //   {
-          //     first_name: answer.firstname,
-          //     last_name: answer.lastname,
-          //     role_id: answer.roleId,
-          //     manager_id: answer.managerId
-          //   },
-          //  (err) => {
+          console.log(answer);
+          connection.query('INSERT INTO employee SET ?',
+            {
+              first_name: answer.firstname,
+              last_name: answer.lastname,
+              role_id: answer.roleId || 0,
+              manager_id: answer.managerId || 0,
+            },
+            (err) => {
               if (err) throw err
-              console.table(answer);
+              console.table('Your employee has been added!');
               start();
-           // }
-        })
+            }   
+        )
     });
   });
+});
 }
 
-// let roleArray = [];
-// const selectRole = () => {
-//   connection.query("SELECT * FROM role", (err, role) => {
-//     if (err) throw err
-//     for (const i = 0; i < role.length; i++) {
-//       roleArray.push(role[i].title);
-//     }
-//   }); return roleArray;
-// }
-
-// let managArray = [];
-// const selectManager = () => {
-//   connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", (err, manager) => {
-//     if (err) throw err
-//     for (const i = 0; i < manager.length; i++) {
-//       managArray.push(manager[i].first_name);
-//     };
-//   }); return managArray;
-// }
 
 const updateEmployeeRole = () => {
   connection.query(`"SELECT employe.first_name, role.title FROM employee"`);
@@ -185,22 +180,12 @@ const updateEmployeeRole = () => {
   ]
 }
 
-const updateEmployeeManager = () => {
-
-}
-// 'INSERT INTO role SET ?',
-// {
-//   title: answer,
-//   salary: answer,
-//   department_id: answer
-// }
-
-
-
-
-
 connection.connect((err) => {
   if (err) throw err;
   // run the start function after the connection is made to prompt the user
   start();
 });
+
+const exitApp = () => {
+  connection.end();
+}
