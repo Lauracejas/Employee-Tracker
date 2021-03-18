@@ -27,8 +27,8 @@ You can see these tests run by viewing the provided animated GIF file
 
 ## Challenge
 
-Joining the different databases to make a cohesive view was challenging.
-The employee managers are able to be viewed but not in it's own category.
+Joining the different tables to make a cohesive view was challenging.
+
 
 ## Questions
 
