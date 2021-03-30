@@ -9,7 +9,7 @@ CLI Content Management System to manage a company's employees. The application l
  
 
 ## Installation
-- Go to https://github.com/ruthtech/employee-tracker and click on the "Clone or Download" button. 
+- Go to https://github.com/Lauracejas/Employee-Tracker and click on the "Clone or Download" button. 
 - Choose "Download ZIP". 
 - Unzip into a directory. If you're on Windows, open File Explorer and navigate to the download directory. Select the ZIP file, right click, and choose "Extract All". Accept the default location.
 - Once the file is unzipped, navigate to employee-tracker-master.

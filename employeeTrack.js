@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
   user: 'root',
 
   // Your password
-  password: 'rootpass',
+  password: '',
   database: 'emp_trackerDB',
 });
 
@@ -30,9 +30,11 @@ const start = () => {
       'View all employees by Department',
       'View all roles',
       'Add employee',
+      'Add department',
+      'Add role',
       'Update employee role',
       'EXIT'
-      
+
     ],
   })
     .then(answer => {
@@ -51,6 +53,12 @@ const start = () => {
           break;
         case 'Add employee':
           addEmployee();
+          break;
+        case 'Add department':
+          addDepartment();
+          break;
+        case 'Add role':
+          addRole();
           break;
         case 'Update employee role':
           updateEmployeeRole();
@@ -167,6 +175,46 @@ const addEmployee = () => {
   });
 }
 
+const addRole = () => {
+  //connection.query("SELECT * FROM role", (err, roles) => {
+  connection.query("SELECT * FROM department", (err, departments) => {
+
+    inquirer.prompt([
+      {
+        name: 'newTitle',
+        type: 'input',
+        message: 'Enter the new Role:'
+      },
+      {
+        name: 'newSalary',
+        type: 'input',
+        message: 'Enter the salary for the new Role:'
+      },
+      {
+        name: 'dept',
+        type: 'list',
+        message: 'Select the Department for this new Title:',
+        choices: departments.map(department => {
+          return { name: department.name, Value: department.id }
+        })
+      },
+    ]).then((answer) => {
+      connection.query(`INSERT INTO role SET ?`,
+        {
+          title: answer.newTitle,
+          salary: answer.newSalary,
+          department_id: answer.dept
+        },
+        (err) => {
+          if (err) throw err
+          console.table('Your role has been added!');
+          start();
+        }
+      );
+    });
+  });
+  //});
+}
 const updateEmployeeRole = () => {
   const query = `SELECT employe.first_name, role.title 
   FROM employee JOIN role ON employee.role_id = role.id
@@ -194,17 +242,17 @@ const updateEmployeeRole = () => {
         choices: selectRole(),
       }
     ])
-      //  I Have to finish this part of the code to seve the updated employee
+    //  I Have to finish this part of the code to seve the updated employee
 
-    });
-  };
-
-  connection.connect((err) => {
-    if (err) throw err;
-    // run the start function after the connection is made to prompt the user
-    start();
   });
+};
 
-  const exitApp = () => {
-    connection.end();
-  }
+connection.connect((err) => {
+  if (err) throw err;
+  // run the start function after the connection is made to prompt the user
+  start();
+});
+
+const exitApp = () => {
+  connection.end();
+}
